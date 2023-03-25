@@ -46,7 +46,6 @@ string generar_caracteres_aleatorios(int n) {
     string pancakes = "";
     unordered_set<char> chars_set;
     srand(time(NULL));
-
     while (chars_set.size() < n) {
         char c = 'a' + rand() % 26;
         if (chars_set.find(c) == chars_set.end()) {
@@ -54,7 +53,6 @@ string generar_caracteres_aleatorios(int n) {
             pancakes += c;
         }
     }
-
     return pancakes;
 }
 
@@ -69,7 +67,6 @@ void dfs(string pancakes) {
         string curr_pancakes = pila.top();
         pila.pop();
         count++;
-
         if (esta_ordenada(curr_pancakes)) {
             cout << "Solucion encontrada: " << curr_pancakes << endl;
             cout << "Numero de nodos visitados: " << count << endl;
