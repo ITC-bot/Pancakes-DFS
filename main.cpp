@@ -1,10 +1,11 @@
 #include <iostream>
 #include <string>
 #include <unordered_set>
-#include <stdlib.h>
+#include <cstdlib>
 #include <ctime>
 #include <vector>
-#include <stack>
+#include <math.h>
+#include <algorithm>
 
 using namespace std;
 
@@ -18,6 +19,21 @@ void voltear(string& pancakes, int k) {
         i++;
         j--;
     }
+}
+
+// Función que genera una cadena aleatoria de caracteres que representen los pancakes a ordenar
+string generar_caracteres_aleatorios(int n) {
+    string pancakes = "";
+    unordered_set<char> chars_set;
+    srand(time(NULL));
+    while (chars_set.size() < n) {
+        char c = 'a' + rand() % 26;
+        if (chars_set.find(c) == chars_set.end()) {
+            chars_set.insert(c);
+            pancakes += c;
+        }
+    }
+    return pancakes;
 }
 
 // Función que verifica si está ordenada
@@ -41,54 +57,46 @@ vector<string> generar_sucesores(string pancakes) {
     return sucesores;
 }
 
-// Función que genera una cadena aleatoria de caracteres que representen los pancakes a ordenar
-string generar_caracteres_aleatorios(int n) {
-    string pancakes = "";
-    unordered_set<char> chars_set;
-    srand(time(NULL));
-    while (chars_set.size() < n) {
-        char c = 'a' + rand() % 26;
-        if (chars_set.find(c) == chars_set.end()) {
-            chars_set.insert(c);
-            pancakes += c;
-        }
-    }
-    return pancakes;
-}
-
-// Función que realiza la búsqueda en profundidad
-void dfs(string pancakes, unordered_set<string>& visitados, int& count) {
+// Función de búsqueda en profundidad
+bool dfs(string curr, string end, unordered_set<string>& visited, int depth, int max_depth, int& count){
+    visited.insert(curr);
     count++;
-    if (esta_ordenada(pancakes)) {
-        cout << "Solucion encontrada: " << pancakes << endl;
-        return;
+    if (curr == end){
+        return true;
     }
-    vector<string> sucesores = generar_sucesores(pancakes);
-    for (string sucesor : sucesores) {
-        if (visitados.find(sucesor) == visitados.end()) {
-            visitados.insert(sucesor);
-            dfs(sucesor, visitados, count);
+    if (depth == max_depth){
+        return false;
+    }
+    vector<string> sucesores = generar_sucesores(curr);
+    for (string sucesor : sucesores){
+        if (visited.count(sucesor) == 0){
+            if (dfs(sucesor, end, visited, depth+1, max_depth, count)){
+                return true;
+            }
         }
     }
+    return false;
 }
 
-//Funcion principal
+// Función principal
 int main() {
     int n;
     cout << "Ingrese el numero de caracteres de pancakes: ";
     cin >> n;
     string pancakes = generar_caracteres_aleatorios(n);
     cout << "Pila de pancakes original: " << pancakes << endl;
-    unordered_set<string> visitados;
+    string pancakeEnd = pancakes;
+    sort(pancakeEnd.begin(), pancakeEnd.end());
+    unordered_set<string> visited;
     int count = 0;
-    visitados.insert(pancakes);
-    dfs(pancakes, visitados, count);
-    if (count > 0) {
+    int max_depth = 30; // profundidad máxima de la búsqueda
+    bool found = dfs(pancakes, pancakeEnd, visited, 0, max_depth, count);
+    cout << "Pila de pancakes ordenada: " << pancakeEnd << endl;
+    if (found){
         cout << "Numero de nodos visitados: " << count << endl;
-    } else {
-        cout << "No se encontro solucion." << endl;
+    }
+    else {
+        cout << "No se encontro una solucion" << endl;
     }
     return 0;
 }
-
-
