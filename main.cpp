@@ -57,32 +57,19 @@ string generar_caracteres_aleatorios(int n) {
 }
 
 // Función que realiza la búsqueda en profundidad
-void dfs(string pancakes) {
-    stack<string> pila;
-    unordered_set<string> visitados;
-    int count = 0;
-    pila.push(pancakes);
-    visitados.insert(pancakes);
-    while (!pila.empty()) {
-        string curr_pancakes = pila.top();
-        pila.pop();
-        count++;
-        if (esta_ordenada(curr_pancakes)) {
-            cout << "Solucion encontrada: " << curr_pancakes << endl;
-            cout << "Numero de nodos visitados: " << count << endl;
-            return;
-        }
-        vector<string> sucesores = generar_sucesores(curr_pancakes);
-        for (string sucesor : sucesores) {
-            if (visitados.find(sucesor) == visitados.end()) {
-                pila.push(sucesor);
-                visitados.insert(sucesor);
-                count++;
-            }
+void dfs(string pancakes, unordered_set<string>& visitados, int& count) {
+    count++;
+    if (esta_ordenada(pancakes)) {
+        cout << "Solucion encontrada: " << pancakes << endl;
+        return;
+    }
+    vector<string> sucesores = generar_sucesores(pancakes);
+    for (string sucesor : sucesores) {
+        if (visitados.find(sucesor) == visitados.end()) {
+            visitados.insert(sucesor);
+            dfs(sucesor, visitados, count);
         }
     }
-    cout << "No se encontro solucion." << endl;
-    cout << "Numero de nodos visitados: " << count << endl;
 }
 
 //Funcion principal
@@ -92,7 +79,16 @@ int main() {
     cin >> n;
     string pancakes = generar_caracteres_aleatorios(n);
     cout << "Pila de pancakes original: " << pancakes << endl;
-    dfs(pancakes);
+    unordered_set<string> visitados;
+    int count = 0;
+    visitados.insert(pancakes);
+    dfs(pancakes, visitados, count);
+    if (count > 0) {
+        cout << "Numero de nodos visitados: " << count << endl;
+    } else {
+        cout << "No se encontro solucion." << endl;
+    }
     return 0;
 }
+
 
