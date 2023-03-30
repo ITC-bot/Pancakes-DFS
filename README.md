@@ -18,7 +18,7 @@ Esta función recibe una cadena de caracteres pancakes y devuelve un vector de c
 Esta función recibe un entero n y devuelve una cadena de caracteres de longitud n, se usa para generar caracteres aleatorios, asi ahorrando estar pidiendo al usuario que se ingrese caracter por caracter.
 
 --"void dfs(string pancakes)"
-Por actualizar
+La función dfs es una función recursiva que implementa la búsqueda en profundidad (DFS). Esta función recibe como parámetros los pancakes actuales(curr), la configuración final ordenada de los pancakes (end), un conjunto de configuraciones visitadas (visited), la profundidad actual (depth), la profundidad máxima permitida (max_depth) y una variable para contar el número de nodos visitados (count).
 
 --"int main()" 
 Esta es la función principal del programa. Solicita al usuario el número de caracteres de la pila de pancakes, genera una configuración aleatoria de pancakes utilizando la función generar_caracteres_aleatorios y llama a la función dfs para llevar a cabo la búsqueda por amplitud.
